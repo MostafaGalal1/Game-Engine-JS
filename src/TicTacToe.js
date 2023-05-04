@@ -1,36 +1,43 @@
 import GameEngine from "./GameEngine";
 import Board from "./Board";
-import React from 'react';
 import XOPiece from "./XOpieces/XOPiece";
 
-
-export default class TicTacToe {
-
-    state = {
-        currentPlayer: 'x',
-        board: [
-            [new XOPiece(), new XOPiece(), new XOPiece()],
-            [new XOPiece(), new XOPiece(), new XOPiece()],
-            [new XOPiece(), new XOPiece(), new XOPiece()]  
-        ]
-    };
-    
-    drawer() {
+export default class TicTacToe extends GameEngine {
+    init(gameState) {
         return (
             <div className="game">
-                <Board rows={3} cols={3} colorSwitch={true} colorOne={"#eee"} colorTwo={"#ddd"} board={this.state.board} action={this.controller.bind(this)} />
+                <Board rows={3} cols={3} colorSwitch={true} colorOne={"#ffce9e"} colorTwo={"#d18b47"} board={gameState.board} />
             </div>
         );
     }
 
-    controller(move) {
-        if (!this.state.board[move[0]][move[1]].getPlayer()) {
-            this.state.board[move[0]][move[1]].setPlayer(this.state.currentPlayer);
-            this.setState({ currentPlayer: this.state.currentPlayer === 'x' ? 'o' : 'x' });
-        }    
+    drawer(gameState) {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                var im = document.getElementById(`${i}-${j}`);
+                im.src = gameState.board[i][j].image;
+            }
+        }
     }
 
-    render() {
-        return (this.drawer());
+    getPosition(position) {
+        const column = position.charCodeAt(0) - 97;
+        const row = 3 - parseInt(position.charCodeAt(1) - 48);
+        return [row, column];
+    }
+
+    controller(gameState, gameMove) {
+        gameMove = this.getPosition(gameMove);
+        if (gameState.board[gameMove[0]][gameMove[1]].getPlayer()==="none") {
+            const mat = gameState.board.map(row => [...row]);
+            mat[gameMove[0]][gameMove[1]] = new XOPiece(gameState.currentPlayer);
+            gameState.currentPlayer = gameState.currentPlayer === 'x' ? 'o' : 'x';
+            gameState.board = mat;
+            this.drawer(gameState);
+        }
+        else {
+            alert("wrong move");
+        }
+
     }
 }

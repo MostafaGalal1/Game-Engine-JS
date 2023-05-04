@@ -1,6 +1,11 @@
 export default class XOPiece {
-    constructor() {        
-            this.image = `/assets/none.png`;
+    // constructor() {
+    //         this.image = `/assets/none.png`;
+    // }
+    player="none"
+    constructor(player="none") {        
+        this.image = `/assets/${player}.png`;
+        this.player = player;
     }
 
     getPlayer() {
