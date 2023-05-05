@@ -1,16 +1,18 @@
-import { click } from "@testing-library/user-event/dist/click";
-import { GameEngine, Board } from "./GameEngine";
-import { cloneElement } from "react";
-import { render } from "react-dom";
+import GameEngine from "./GameEngine";
+import Board from "./Board";
+import RedC4 from "./Connect4Pieces/C4Piece";
+import C4Piece from "./Connect4Pieces/C4Piece";
 export class Connect4 extends GameEngine {
-  currState = null;
-  currPlayer = 0;
-  prevStates = [];
-  numberOfPlayers = 2;
-  numberOfInputs = 1;
+  init(gameState) {
+    return (
+        <div className="game">
+            <Board rows={6} cols={7} colorSwitch={true} colorOne={"#0000ff"} colorTwo={"#0000ff"} board={gameState.board} />
+        </div>
+    );
+}
+
 
   initializor() {
-    const _ = require('lodash');
     let inputs = [];
     this.drawer(this.currState);
     document.addEventListener('click', (event)=>{
@@ -26,43 +28,31 @@ export class Connect4 extends GameEngine {
   }
 
   drawer(gameState) {
-    if(gameState === null){
-        render(
-          <div className="game">
-            <button width={`${400 / 10}px`} height={`${400 / 10}px`} onClick={() => this.undo()}>undo</button>
-            <div className="game-board">
-              <Board row={6} col={7} onSquareClick={null} />
-            </div>
-          </div>
-        );
-    }
-    const colors = ['#0000ff', '#FF0000', '#ffff00']
-    if(gameState !== null){
-      for(let i=0;i<gameState.length-1;i++){
-        for(let j=0;j<gameState[0].length;j++){
-          document.getElementById((5-i)*7+j).style.backgroundColor = colors[gameState[j][i]];
-        }
+    for(let i=0;i<gameState.board.length-1;i++){
+      for(let j=0;j<gameState.board[0].length;j++){
+        console.log(gameState.board[i][j].image);
+        
+        document.getElementById(`${gameState.board.length-2-i}-${j}`).src = gameState.board[j][i].image;
       }
     }
-    
   }
+
 
   controller(gameState, gameMove) {
-    gameMove = gameMove.map((item) => parseInt(item)%7)
-    if(gameState === null){
-      gameState = new Array(7).fill(0).map(() => new Array(7).fill(0));
+    console.log(gameMove);
+    if(!/^\+?(0|[1-9]\d*)$/.test(gameMove) || (gameMove>7 || gameMove<1)){
+      alert("bad input, please, enter a number from 1 to 7\nnote the colums are numbered from left to right.")
+      return false;
     }
-    if(gameState[gameMove[0]][6] !== 6){
-      gameState[gameMove[0]][gameState[gameMove[0]][6]] = this.currPlayer+1;
-      gameState[gameMove[0]][6]++;
-      this.currPlayer = (this.currPlayer+1)%this.numberOfPlayers; ///improve later maybe add it to the gameState
+    gameMove = parseInt(gameMove)-1;
+    if(gameState.board[gameMove][6].count !== 6){
+      gameState.board[gameMove][gameState.board[gameMove][6].count] = gameState.currentPlayer === 'w'? new C4Piece(true):new C4Piece(false);
+      gameState.board[gameMove][6].count++;
+      console.log(gameState.board);
+      this.drawer(gameState);
+      return true; ///improve later maybe add it to the gameState
     }
-    return gameState;
-  }
-
-  undo(){
-    this.currState = this.prevStates.slice();
-    this.drawer(this.currState);
-    this.flag = !this.flag;
+    alert("invalid move, col full")
+    return false;
   }
 }

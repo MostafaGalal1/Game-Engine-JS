@@ -12,6 +12,8 @@ import Queen from "./pieces/Queen";
 import QEmpty from "./qpieces/QEmpty";
 import TicTacToe from "./TicTacToe";
 import XOPiece from "./XOpieces/XOPiece";
+import { Connect4 } from "./Connect4";
+import EmptyC4 from "./Connect4Pieces/EmptyC4";
 
 function getGame(gameName) {
   switch (gameName) {
@@ -52,6 +54,13 @@ function getGame(gameName) {
             [new XOPiece(), new XOPiece(), new XOPiece()],
             [new XOPiece(), new XOPiece(), new XOPiece()]
           ]
+        }
+      }
+    case "Connect4":
+      return {
+        gameObject: new Connect4(), initState: {
+          currentPlayer: 'w',
+          board: new Array(7).fill(0).map(() => new Array(7).fill(new EmptyC4()))
         }
       }
     default:
