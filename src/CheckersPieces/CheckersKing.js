@@ -13,7 +13,7 @@ export default class CheckersKing extends CheckersMan{
           || (totalState.currentPlayer === 'b' && (this.team === 'red')) || (totalState.currentPlayer === 'w' && (this.team === 'black')))){
         return -1;
       }
-    //   totalState.board[gameMove[1][0]][gameMove[1][1]] = this;
+      totalState.board[gameMove[1][0]][gameMove[1][1]] = this;
       totalState.board[gameMove[0][0]][gameMove[0][1]] = 0;
       return 3;
     }
