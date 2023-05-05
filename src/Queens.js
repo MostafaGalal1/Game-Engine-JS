@@ -33,12 +33,10 @@ export default class Chess extends GameEngine {
             const mat = gameState.board.map(row => [...row]);
             mat[gameMove[0]][gameMove[1]] = new QQueen();
             gameState.board = mat;
-            this.drawer(gameState);
         } else if (gameState.board[gameMove[0]][gameMove[1]] instanceof QQueen) {
             const mat = gameState.board.map(row => [...row]);
             mat[gameMove[0]][gameMove[1]] = new QEmpty();
             gameState.board = mat;
-            this.drawer(gameState);
         } else {
             alert("wrong move");
         }

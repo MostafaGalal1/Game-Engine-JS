@@ -32,7 +32,6 @@ export default class TicTacToe extends GameEngine {
             const mat = gameState.board.map(row => [...row]);
             mat[gameMove[0]][gameMove[1]] = new XOPiece(gameState.currentPlayer);
             gameState.board = mat;
-            this.drawer(gameState);
             return true;
         }
         alert("wrong move");

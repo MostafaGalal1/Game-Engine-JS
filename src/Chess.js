@@ -42,7 +42,6 @@ export default class Chess extends GameEngine{
                 mat[gameMove[0]][gameMove[1]] = mat[src[0]][src[1]];
                 mat[src[0]][src[1]] = new Empty('');
                 gameState.board = mat;
-                this.drawer(gameState);
                 gameState.pieceSelected = [-1, -1];
                 return true;
             }
