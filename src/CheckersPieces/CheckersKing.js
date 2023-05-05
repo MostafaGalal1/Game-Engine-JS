@@ -9,7 +9,8 @@ export default class CheckersKing extends CheckersMan{
 
     move(gameMove, totalState){
       console.log(totalState);
-      if(((Math.abs(gameMove[1][0]-gameMove[0][0]) !== 1) || (Math.abs(gameMove[1][1]-gameMove[0][1]) !== 1) || (totalState.currentPlayer === 'w' && (this.team === 'red')) || (totalState.currentPlayer === 'b' && (this.team === 'black')))){
+      if(((Math.abs(gameMove[1][0]-gameMove[0][0]) !== 1) || (Math.abs(gameMove[1][1]-gameMove[0][1]) !== 1)
+          || (totalState.currentPlayer === 'b' && (this.team === 'red')) || (totalState.currentPlayer === 'w' && (this.team === 'black')))){
         return -1;
       }
     //   totalState.board[gameMove[1][0]][gameMove[1][1]] = this;
@@ -19,7 +20,8 @@ export default class CheckersKing extends CheckersMan{
 
     kill(gameMove, totalState){
       // will need to do a while loop to keep killing if multiple deaths can occur
-      if(((Math.abs(gameMove[1][0]-gameMove[0][0]) !== 2) || (Math.abs(gameMove[1][1]-gameMove[0][1]) !== 2) || (totalState.currentPlayer === 'w' && (this.team === 'red')) || (totalState.currentPlayer === 'b' && (this.team === 'red')) || (totalState.turn && (this.team === 'black')))){
+      if(((Math.abs(gameMove[1][0]-gameMove[0][0]) !== 2) || (Math.abs(gameMove[1][1]-gameMove[0][1]) !== 2)
+          || (totalState.currentPlayer === 'b' && (this.team === 'red')) || (totalState.currentPlayer === 'w' && (this.team === 'black')))){
         return -1;
       }
 
@@ -29,7 +31,7 @@ export default class CheckersKing extends CheckersMan{
         totalState.board[parseInt((gameMove[0][0]+gameMove[1][0])/2)][parseInt((gameMove[0][1]+gameMove[1][1])/2)] = 0;
         totalState.board[gameMove[1][0]][gameMove[1][1]] = this;
         totalState.board[gameMove[0][0]][gameMove[0][1]] = 0;
-        return 3;
+        return 13;
       }
       return -1;
     }

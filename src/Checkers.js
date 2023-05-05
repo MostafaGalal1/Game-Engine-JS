@@ -41,17 +41,15 @@ export class Checkers extends GameEngine{
     getPosition(position) {
       const column = position.charCodeAt(0) - 97;
       const row = 8 - parseInt(position.charCodeAt(1) - 48);
-      console.log(column);
-      console.log(row);
       if(column>8 || column<0 || row>8 || row<0 || isNaN(column) || isNaN(row))
         return false;
       return [row, column];
     }
   
     controller(totalState, gameMove) {
+      console.log(totalState.board.toString());
       let parsedMove = gameMove.split(" ").map((pos) => this.getPosition(pos));
       let gameState = totalState.board;
-      console.log(parsedMove, gameMove);
       if(parsedMove[0] === false || parsedMove[1] === false || parsedMove.length !== 2){
         return false;
       }
@@ -59,18 +57,15 @@ export class Checkers extends GameEngine{
       if((gameState[parsedMove[0][0]][parsedMove[0][1]] !==0) && (gameState[parsedMove[1][0]][parsedMove[1][1]] === 0)){ 
         if(Math.abs(parsedMove[1][0]-parsedMove[0][0]) === 1){res = gameState[parsedMove[0][0]][parsedMove[0][1]].move(parsedMove, totalState);}
         if(Math.abs(parsedMove[1][0]-parsedMove[0][0]) === 2){res = gameState[parsedMove[0][0]][parsedMove[0][1]].kill(parsedMove, totalState);}
-        switch(res){
+        switch(res % 10){
           case 1:
             totalState.board[parsedMove[1][0]][parsedMove[1][1]] = new CheckersKing('black');
-            console.log(totalState.board);
-            return true;
+            return res <= 10;
           case 2:
             totalState.board[parsedMove[1][0]][parsedMove[1][1]] = new CheckersKing('red');
-            console.log(totalState.board);
-            return true;
+            return res <= 10;
           case 3:
-            console.log(totalState.board);
-            return true;
+            return res <= 10;
           default:
             return false;
         }
