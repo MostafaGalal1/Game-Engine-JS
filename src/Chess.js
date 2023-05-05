@@ -28,12 +28,12 @@ export default class Chess extends GameEngine{
     controller(gameState, gameMove) { 
         gameMove = this.getPosition(gameMove);
         if (gameState.pieceSelected[0] === -1 && gameState.pieceSelected[1] === -1){
-            console.log("hff" + gameMove);
             if (gameState.board[gameMove[0]][gameMove[1]].getPlayer() !== gameState.currentPlayer) {
                 alert("wrong turn");
-                return;
+                return false;
             }
             gameState.pieceSelected = gameMove;
+            return false;
         } else {
             let src = gameState.pieceSelected;
             if (gameState.board[src[0]][src[1]].isValidMove(src, gameMove, gameState)){
@@ -42,12 +42,13 @@ export default class Chess extends GameEngine{
                 mat[gameMove[0]][gameMove[1]] = mat[src[0]][src[1]];
                 mat[src[0]][src[1]] = new Empty('');
                 gameState.board = mat;
-                gameState.currentPlayer = gameState.currentPlayer === 'w'? 'b':'w';
                 this.drawer(gameState);
-            } else {
-                alert("wrong move");
+                gameState.pieceSelected = [-1, -1];
+                return true;
             }
+            alert("wrong move");
             gameState.pieceSelected = [-1, -1];
+            return false;
         }
     }
 }

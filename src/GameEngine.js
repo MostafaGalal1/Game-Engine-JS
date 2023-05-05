@@ -7,7 +7,8 @@ export default class GameEngine {
                 gameMove = prompt("Enter your move");
             }
             
-            this.controller(gameState, gameMove);
+            if (this.controller(gameState, gameMove))
+                gameState.currentPlayer = gameState.currentPlayer === 'w'? 'b':'w';
             this.start(gameState);
         }, 200);
         return this.init(gameState);

@@ -31,7 +31,6 @@ function getGame(gameName) {
         }
       };
     case "Queens":
-      // case "TicTacToe":
       return {
         gameObject: new Queens(), initState: {
           board: [[new QEmpty(), new QEmpty(), new QEmpty(), new QEmpty(), new QEmpty(), new QEmpty(), new QEmpty(), new QEmpty()],
@@ -47,7 +46,7 @@ function getGame(gameName) {
     case "TicTacToe":
       return {
         gameObject: new TicTacToe(), initState: {
-          currentPlayer: 'x',
+          currentPlayer: 'w',
           board: [
             [new XOPiece(), new XOPiece(), new XOPiece()],
             [new XOPiece(), new XOPiece(), new XOPiece()],
