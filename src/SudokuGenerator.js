@@ -1,4 +1,4 @@
-export class SudokuGenerator {
+export default class SudokuGenerator {
  
     // Constructor
     constructor(N, K) {
@@ -28,6 +28,8 @@ export class SudokuGenerator {
  
         // Remove Randomly K digits to make game
         this.removeKDigits();
+
+        return this.mat
     }
  
     // Fill the diagonal SRN number of SRN x SRN matrices

@@ -13,5 +13,12 @@ code {
 }
 
 .game {
-  margin-left:25%;
+  margin-left:5%;
+}
+img{
+  color: #BADA55;
+  font-weight: bolder;
+  font-size: 50px ; 
+  text-transform: uppercase;
+  
 }
