@@ -1,10 +1,10 @@
 export default class GameEngine {
-
+    inputWindow = window.open('/input')
     start(gameState) {
         var gameMove = null;
         setTimeout(() => {
             while (!gameMove){
-                gameMove = prompt("Enter your move");
+                gameMove = this.inputWindow.prompt("Please, Enter your move.")
             }
             
             if (this.controller(gameState, gameMove))
