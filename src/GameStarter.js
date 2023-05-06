@@ -72,9 +72,9 @@ function getGame(gameName) {
       let temp = new Array(8).fill(0).map((_, i) => new Array(8).fill(0).map((_, j) => {
         if((i+j)%2 === 1){
           if(i<3){
-            return new CheckersMAn('black');
-          }else if(i>4){
             return new CheckersMAn('red');
+          }else if(i>4){
+            return new CheckersMAn('black');
           }
         }
         return 0;

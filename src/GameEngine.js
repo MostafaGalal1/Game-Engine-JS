@@ -11,20 +11,17 @@ export default class GameEngine {
           );
         setTimeout(() => {
           this.drawer(gameState);
-        }, 1000)
+        }, 200)
         while(true){
-          if(gameMove === null){
-            try{
-              gameMove = await this.getInput("Please, Enter your move.", inputWindow);
-            }catch(_){
-              console.log('stay safe');
-            }
-            // console.log(gameMove);
-          }
-          
+          try{
+            gameMove = await this.getInput("Please, Enter your move.", inputWindow);
+          }catch(_){
+            console.log('stay safe');
+          }        
           if (this.controller(gameState, gameMove))
               gameState.currentPlayer = gameState.currentPlayer === 'w'? 'b':'w';
 
+          console.log(gameState);
           this.drawer(gameState);
 
           gameMove = null;

@@ -16,10 +16,11 @@ export class Sudoku extends GameEngine {
     for(let i=0;i<totalState.board.length;i++){
       for(let j=0;j<totalState.board[0].length;j++){
         let elem = document.getElementById(`${i}-${j}`);
-        elem.src = totalState.board[i][j].image;
+        elem.src = "/assets/" + totalState.board[i][j].val + ".svg";
         if(totalState.board[i][j].changable){
           elem.style.filter = "invert(12%) sepia(84%) saturate(4859%) hue-rotate(230deg) brightness(78%) contrast(93%)"
         }
+        console.log(elem, );
       }
     }    
   }
@@ -35,6 +36,8 @@ export class Sudoku extends GameEngine {
 
 
   controller(totalState, gameMove) {
+    console.log(gameMove);
+
     gameMove = gameMove.split(" ")
     let parsedMove = [this.getPosition(gameMove[0])];
     console.log(parsedMove);
