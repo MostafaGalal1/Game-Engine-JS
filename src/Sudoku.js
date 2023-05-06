@@ -16,8 +16,7 @@ export class Sudoku extends GameEngine {
     for(let i=0;i<totalState.board.length;i++){
       for(let j=0;j<totalState.board[0].length;j++){
         let elem = document.getElementById(`${i}-${j}`);
-          elem.src = "/assets/" + totalState.board[i][j].val + ".svg";
-        console.log('ggg');
+        elem.src = totalState.board[i][j].image;
         if(totalState.board[i][j].changable){
           elem.style.filter = "invert(12%) sepia(84%) saturate(4859%) hue-rotate(230deg) brightness(78%) contrast(93%)"
         }

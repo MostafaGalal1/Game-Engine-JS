@@ -72,9 +72,9 @@ function getGame(gameName) {
       let temp = new Array(8).fill(0).map((_, i) => new Array(8).fill(0).map((_, j) => {
         if((i+j)%2 === 1){
           if(i<3){
-            return new CheckersMAn('red');
-          }else if(i>4){
             return new CheckersMAn('black');
+          }else if(i>4){
+            return new CheckersMAn('red');
           }
         }
         return 0;
@@ -102,5 +102,6 @@ function getGame(gameName) {
 export function GameStarter() {
   const { id } = useParams();
   const { gameObject, initState } = getGame(id);
-  return (gameObject.start(initState));
+  gameObject.start(initState);
+  // return (await gameObject.start(initState));
 };
