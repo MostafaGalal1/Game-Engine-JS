@@ -1,120 +1,88 @@
-import { click } from "@testing-library/user-event/dist/click";
-import { GameEngine, Board } from "./GameEngine";
-import { cloneElement, useEffect, useState } from "react";
-import { floor, to } from "mathjs";
-import { waitFor } from "@testing-library/react";
-import { SudokuGenerator } from "./SudokuGenerator";
+import Board from "./Board";
+import GameEngine from "./GameEngine";
+
 export class Sudoku extends GameEngine {
-  currState = null;
-  prevStates = [];
-  initializor() {
-    this.currState = this.controller(null, null);
+  
+  init(gameState) {
+    return (
+        <div className="game">
+            <Board rows={9} cols={9} colorSwitch={true} colorOne={"#aaaaaa"} colorTwo={"#aaaaaa"} board={gameState.board} />
+        </div>
+    );
   }
 
   drawer(totalState) {
-    let gameMove = [];
-    let elements = document.querySelectorAll('[name="game-squares"]');
-    if(elements.length === 0){
-      const ReactDOM = require('react-dom/client');
-      const container = document.getElementById('root'); /////change laterrrrrrrrr when finishing up to 'game'
-      const root = ReactDOM.createRoot(container);
-      const handleSquareChoose = event => {
-        gameMove[0] = [parseInt(event.target.value/9), parseInt(event.target.value%9)];
-      }
-      const handleNumberInput = event => {
-        gameMove[1] = parseInt(event.target.value)+1;
-        if(gameMove[0] !== undefined){
-          totalState = this.controller(totalState, gameMove);
+    console.log(totalState);
+    for(let i=0;i<totalState.board.length;i++){
+      for(let j=0;j<totalState.board[0].length;j++){
+        let elem = document.getElementById(`${i}-${j}`);
+        elem.src = "/assets/" + totalState.board[i][j].val + ".svg";
+        if(totalState.board[i][j].changable){
+          elem.style.filter = "invert(12%) sepia(84%) saturate(4859%) hue-rotate(230deg) brightness(78%) contrast(93%)"
         }
+        console.log(elem, );
       }
-      
-        root.render(
-          <div className="game">
-            <button width={`${400 / 10}px`} height={`${400 / 10}px`} onClick={() => this.undo()}>undo</button>
-            <button width={`${400 / 10}px`} height={`${400 / 10}px`} onClick={() => this.drawer(totalState)}>rerender</button>
-            <div className="game-board">
-                <Board row={9} col={9} name={"game-squares"} onSquareClick={handleSquareChoose} />
-            </div>
-            <div className="keypad">
-                <Board row={3} col={3} name={"keypad"} onSquareClick={handleNumberInput} />
-            </div>
-          </div>
-        );
-
-    }
-        
-    
-    elements = document.querySelectorAll('[name="game-squares"]');
-    if(elements.length === 0){
-      return;
-    }
-    if(totalState !== null){
-      for(let i=0;i<totalState.mat.length;i++){
-        for(let j=0;j<totalState.mat[0].length;j++){
-          elements[i*9+j].innerHTML = (totalState.mat[i][j] !== 0)? totalState.mat[i][j]: '';
-          if(totalState.emmu[i][j]){
-            elements[i*9+j].style.color = 'blue'
-          }
-        }
-      }
-    }
-
-    
+    }    
+  }
+  
+  getPosition(position) {
+    const column = position.charCodeAt(0) - 97;
+    const row = 9 - parseInt(position.charCodeAt(1) - 48);
+    console.log(column);
+    if(column>8 || column<0 || row>8 || row<0 || isNaN(column) || isNaN(row))
+      return false;
+    return [row, column];
   }
 
+
   controller(totalState, gameMove) {
-    if(totalState === null){ /// not supposed to happen since we will feed it the starting state later but just in case
-        let sudoku = new SudokuGenerator(9, 40)
-        sudoku.fillValues();
-        totalState = {
-          mat: sudoku.mat,
-          emmu: new Array(9).fill(false).map((row)=> new Array(9).fill(false))
-        };
-        sudoku.mat.forEach((row, i) => row.forEach((value, j) => {totalState.emmu[i][j] = (value===0)? false: true}))
-        this.drawer(totalState);
-        return totalState;
+    console.log(gameMove);
+
+    gameMove = gameMove.split(" ")
+    let parsedMove = [this.getPosition(gameMove[0])];
+    console.log(parsedMove);
+    if(!/^\+?(0|[1-9]\d*)$/.test(gameMove[1]) || parsedMove[0]===false || (gameMove[1]>9 || gameMove[1]<1)){
+      alert("bad input, please, enter a number from 1 to 9\nnote the colums are numbered from left to right.")
+      return false;
     }
-    if(totalState.emmu[gameMove[0][0]][gameMove[0][1]]){
+    parsedMove.push(parseInt(gameMove[1]));
+    console.log(totalState.board[parsedMove[0][0]][parsedMove[0][1]]);
+    if(!totalState.board[parsedMove[0][0]][parsedMove[0][1]].changable){
       alert("can't change a preset value");
-      return totalState;
+      return false;
     }
-    let gameState = totalState.mat;
+    let gameState = totalState.board;
     console.log(gameState);
+
     let valid = true;
-    gameState[gameMove[0][0]][gameMove[0][1]] = gameMove[1];
-    let vertOff = parseInt(gameMove[0][0]/3)*3;
-    let horiOff = parseInt(gameMove[0][1]/3)*3;
+    gameState[parsedMove[0][0]][parsedMove[0][1]].val = parsedMove[1];
+    let vertOff = parseInt(parsedMove[0][0]/3)*3;
+    let horiOff = parseInt(parsedMove[0][1]/3)*3;
     
     for(let i=0;i<gameState.length;i++){
-        if((i !== gameMove[0][1]) && (gameState[gameMove[0][0]][i] === gameMove[1])){
-            console.log(gameState[gameMove[0][0]][i]);
-            valid = false;
-            break;
-        }
-        if((i !== gameMove[0][0]) && (gameState[i][gameMove[0][1]] === gameMove[1])){
+        if((i !== parsedMove[0][1]) && (gameState[parsedMove[0][0]][i].val === parsedMove[1])){
+            console.log(gameState[parsedMove[0][0]][i]);
             valid = false;
             break;
         }
         
-
-        //still needs to check the smaller square will do later
-        if((parseInt(i/3)+vertOff !== gameMove[0][0]) && (parseInt(i%3)+horiOff !== gameMove[0][1]) && (gameState[parseInt(i/3)+vertOff][parseInt(i%3)+horiOff] === gameMove[1])){
+        if((i !== parsedMove[0][0]) && (gameState[i][parsedMove[0][1]].val === parsedMove[1])){
             valid = false;
             break;
-          }
+        }
+        
+        //still needs to check the smaller square will do later
+        if((parseInt(i/3)+vertOff !== parsedMove[0][0]) && (parseInt(i%3)+horiOff !== parsedMove[0][1]) && (gameState[parseInt(i/3)+vertOff][parseInt(i%3)+horiOff].val === parsedMove[1])){
+            valid = false;
+            break;
+        }
     }
 
     //improve later and add it to game state to let the drawer know
     if(!valid){ // you have the choice to either not permit the move or do it (maybe add indicater to let him know of his mistake)
       alert("not valid move");
     }
-    this.drawer(totalState);
-    return totalState;
+    return false;
   }
 
-  undo(){
-    this.currState = this.prevStates.slice();
-    this.drawer(this.currState);
-    this.flag = !this.flag;
-  }
 }

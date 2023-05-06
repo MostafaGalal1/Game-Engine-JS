@@ -12,6 +12,13 @@ import Queen from "./pieces/Queen";
 import QEmpty from "./qpieces/QEmpty";
 import TicTacToe from "./TicTacToe";
 import XOPiece from "./XOpieces/XOPiece";
+import { Connect4 } from "./Connect4";
+import EmptyC4 from "./Connect4Pieces/EmptyC4";
+import { Checkers } from "./Checkers";
+import CheckersMAn from "./CheckersPieces/CheckersMan";
+import SudokuCell from "./SudokuCell/SudokuCell";
+import { Sudoku } from "./Sudoku";
+import SudokuGenerator from "./SudokuGenerator";
 
 function getGame(gameName) {
   switch (gameName) {
@@ -54,6 +61,39 @@ function getGame(gameName) {
           ]
         }
       }
+    case "Connect4":
+      return {
+        gameObject: new Connect4(), initState: {
+          currentPlayer: 'w',
+          board: new Array(7).fill(0).map(() => new Array(7).fill(new EmptyC4()))
+        }
+      }
+    case "Checkers":
+      let temp = new Array(8).fill(0).map((_, i) => new Array(8).fill(0).map((_, j) => {
+        if((i+j)%2 === 1){
+          if(i<3){
+            return new CheckersMAn('red');
+          }else if(i>4){
+            return new CheckersMAn('black');
+          }
+        }
+        return 0;
+      }))
+      temp.push(new Array(8).fill(0));
+      temp.forEach((row) => row.push(0));
+      return{
+        gameObject: new Checkers(), initState: {
+          currentPlayer: 'w',
+          board: temp
+        }
+      }
+    case "Sudoku":
+      return{
+        gameObject: new Sudoku(), initState: {
+          currentPlayer: 'w',
+          board: new SudokuGenerator(9, 40).fillValues().map((row) => row.map((val) => new SudokuCell(val, (val===0))))
+        }
+      }
     default:
     // code to be executed if expression doesn't match any of the values
   }
@@ -62,5 +102,6 @@ function getGame(gameName) {
 export function GameStarter() {
   const { id } = useParams();
   const { gameObject, initState } = getGame(id);
-  return (gameObject.start(initState));
+  gameObject.start(initState);
+  // return (await gameObject.start(initState));
 };
