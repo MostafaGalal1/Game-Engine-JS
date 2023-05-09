@@ -19,6 +19,8 @@ import CheckersMAn from "./CheckersPieces/CheckersMan";
 import SudokuCell from "./SudokuCell/SudokuCell";
 import { Sudoku } from "./Sudoku";
 import SudokuGenerator from "./SudokuGenerator";
+import { Connect4 } from "./Connect4";
+import EmptyC4 from "./Connect4Pieces/EmptyC4";
 
 function getGame(gameName) {
   switch (gameName) {
@@ -92,6 +94,13 @@ function getGame(gameName) {
         gameObject: new Sudoku(), initState: {
           currentPlayer: 'w',
           board: new SudokuGenerator(9, 40).fillValues().map((row) => row.map((val) => new SudokuCell(val, (val===0))))
+        }
+      }
+    case "Connect4":
+      return {
+        gameObject: new Connect4(), initState: {
+          currentPlayer: 'w',
+          board: new Array(7).fill(0).map(() => new Array(7).fill(new EmptyC4()))
         }
       }
     default:

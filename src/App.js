@@ -26,6 +26,9 @@ function App() {
           <ul>
               <li><Link to={`/game/Sudoku`}><button>Sudoku</button></Link></li>
           </ul>
+          <ul>
+              <li><Link to={`/game/Connect4`}><button>Connect4</button></Link></li>
+          </ul>
         </>
     }>
       
