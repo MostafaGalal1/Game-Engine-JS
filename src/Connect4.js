@@ -1,9 +1,5 @@
 import GameEngine from "./GameEngine";
 import Board from "./Board";
-import RedC4 from "./Connect4Pieces/C4Piece";
-import C4Piece from "./Connect4Pieces/C4Piece";
-import GameEngine from "./GameEngine";
-import Board from "./Board";
 import C4Piece from "./Connect4Pieces/C4Piece";
 export class Connect4 extends GameEngine {
   init(gameState) {
@@ -12,28 +8,7 @@ export class Connect4 extends GameEngine {
             <Board rows={6} cols={7} colorSwitch={true} colorOne={"#0000ff"} colorTwo={"#0000ff"} board={gameState.board} />
         </div>
     );
-}
 
-
-  initializor() {
-    let inputs = [];
-    this.drawer(this.currState);
-    document.addEventListener('click', (event)=>{
-      if(event.target.className === "square"){
-        inputs.push(event.target.value);
-        if(inputs.length === this.numberOfInputs){
-          this.currState = this.controller(this.currState, inputs);
-          this.drawer(this.currState);
-          inputs = [];
-        }
-      }
-    })
-  init(gameState) {
-    return (
-        <div className="game">
-            <Board rows={6} cols={7} colorSwitch={true} colorOne={"#0000ff"} colorTwo={"#0000ff"} board={gameState.board} />
-        </div>
-    );
   }
 
 
